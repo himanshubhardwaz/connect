@@ -7,7 +7,7 @@ if (!DATABASE_URL) {
 	throw new Error('No url');
 }
 export default {
-	schema: './src/lib/db/schema.ts',
+	schema: './src/lib/db/schema/*',
 	out: './migrations',
 	driver: 'pg',
 	dbCredentials: {
