@@ -1,6 +1,4 @@
 import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
-import { db } from '../db.sever';
-import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 
 export const userTable = pgTable('users', {
 	id: text('id').primaryKey(),
@@ -22,5 +20,3 @@ export const sessionTable = pgTable('sessions', {
 		mode: 'date'
 	}).notNull()
 });
-
-export const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable);

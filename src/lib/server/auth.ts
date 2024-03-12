@@ -1,6 +1,6 @@
 import { Lucia } from 'lucia';
 import { dev } from '$app/environment';
-import { adapter } from '$lib/db/schema/user.schema';
+import { adapter } from '$lib/db/db.sever';
 
 export const lucia = new Lucia(adapter, {
 	sessionCookie: {
