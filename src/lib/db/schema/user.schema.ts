@@ -1,7 +1,9 @@
-import { pgTable, serial, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { db } from '../db.sever';
+import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 
-export const user = pgTable('users', {
-	id: serial('id').primaryKey(),
+export const userTable = pgTable('users', {
+	id: text('id').primaryKey(),
 	fullName: text('full_name').notNull(),
 	email: text('email').notNull().unique(),
 	isEmailVerified: boolean('is_email_verified').default(false),
@@ -10,12 +12,15 @@ export const user = pgTable('users', {
 	hashedPassword: text('hashed_password')
 });
 
-export const forgotPassword = pgTable('forgot_password', {
-	id: serial('id').primaryKey(),
-	isUrlActive: boolean('is_url_active').default(true),
-	userId: serial('user_id')
+export const sessionTable = pgTable('sessions', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
 		.notNull()
-		.references(() => user.id),
-	createdAt: timestamp('created_at').defaultNow(),
-	updatedAt: timestamp('updated_at').defaultNow()
+		.references(() => userTable.id),
+	expiresAt: timestamp('expires_at', {
+		withTimezone: true,
+		mode: 'date'
+	}).notNull()
 });
+
+export const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable);
