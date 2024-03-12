@@ -1,0 +1,1 @@
+ALTER TABLE "forgot_password" ALTER COLUMN "updated_at" SET DEFAULT now();
