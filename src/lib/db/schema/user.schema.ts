@@ -7,7 +7,7 @@ export const userTable = pgTable('users', {
 	isEmailVerified: boolean('is_email_verified').default(false),
 	createdAt: timestamp('created_at').defaultNow(),
 	updatedAt: timestamp('updated_at').defaultNow(),
-	hashedPassword: text('hashed_password')
+	hashedPassword: text('hashed_password').notNull()
 });
 
 export const sessionTable = pgTable('sessions', {
