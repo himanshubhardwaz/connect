@@ -33,7 +33,7 @@ export const actions: Actions = {
 			});
 		}
 
-		if (!isMaleString) {
+		if (!isMaleString || typeof isMaleString !== 'string') {
 			return fail(400, {
 				message: 'Gender required'
 			});
