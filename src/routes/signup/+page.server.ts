@@ -2,7 +2,7 @@ import { lucia } from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { generateId } from 'lucia';
 import { Argon2id } from 'oslo/password';
-import { db } from '$lib/db/db.sever';
+import { db } from '$lib/server/db';
 import { userTable } from '$lib/db/schema/user.schema';
 
 import type { Actions } from './$types';
@@ -13,6 +13,7 @@ export const actions: Actions = {
 		const email = formData.get('email');
 		const password = formData.get('password');
 		const fullName = formData.get('fullName');
+		const isMaleString = formData.get('isMale');
 
 		if (!fullName || typeof fullName !== 'string') {
 			return fail(400, {
@@ -32,6 +33,14 @@ export const actions: Actions = {
 			});
 		}
 
+		if (!isMaleString) {
+			return fail(400, {
+				message: 'Gender required'
+			});
+		}
+
+		const isMale = isMaleString === 'true';
+
 		const userId = generateId(15);
 		const hashedPassword = await new Argon2id().hash(password);
 
@@ -49,7 +58,8 @@ export const actions: Actions = {
 			id: userId,
 			hashedPassword,
 			email,
-			fullName
+			fullName,
+			isMale: !!isMale
 		});
 
 		const session = await lucia.createSession(userId, {});

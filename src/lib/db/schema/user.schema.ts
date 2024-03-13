@@ -4,6 +4,7 @@ export const userTable = pgTable('users', {
 	id: text('id').primaryKey(),
 	fullName: text('full_name').notNull(),
 	email: text('email').notNull().unique(),
+	isMale: boolean('is_male').default(true),
 	isEmailVerified: boolean('is_email_verified').default(false),
 	createdAt: timestamp('created_at').defaultNow(),
 	updatedAt: timestamp('updated_at').defaultNow(),

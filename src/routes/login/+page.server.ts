@@ -1,7 +1,7 @@
 import { lucia } from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { Argon2id } from 'oslo/password';
-import { db } from '$lib/db/db.sever';
+import { db } from '$lib/server/db';
 
 import type { Actions } from './$types';
 

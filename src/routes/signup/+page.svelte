@@ -8,6 +8,13 @@
 	<input name="email" id="email" /><br />
 	<label for="fullName">Full Name</label>
 	<input name="fullName" id="fullName" /><br />
+	<label for="isMale">Gender</label>
+	<select name="isMale" id="isMale">
+		<option value={true}>Male</option>
+		<option value={false}>Female</option>
+		<option value={false}>Other</option>
+	</select>
+	<br />
 	<label for="password">Password</label>
 	<input type="password" name="password" id="password" /><br />
 	<button>Continue</button>
