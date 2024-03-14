@@ -3,12 +3,8 @@ import { userTable } from './user.schema';
 
 export const chatTable = pgTable('chats', {
 	id: text('id').primaryKey(),
-	userOneId: text('user_one_id')
-		.notNull()
-		.references(() => userTable.id),
-	userTwoId: text('user_two_id')
-		.notNull()
-		.references(() => userTable.id),
+	userOneId: text('user_one_id').references(() => userTable.id),
+	userTwoId: text('user_two_id').references(() => userTable.id),
 	createdAt: timestamp('created_at').defaultNow()
 });
 
