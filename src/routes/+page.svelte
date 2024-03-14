@@ -7,3 +7,9 @@
 <form method="post" use:enhance>
 	<button>Sign out</button>
 </form>
+
+<br />
+
+<form method="post" action="/match">
+	<button>Connect</button>
+</form>

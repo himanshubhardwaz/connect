@@ -1,8 +1,8 @@
-import { pgTable, text, timestamp, serial, boolean, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, serial, boolean } from 'drizzle-orm/pg-core';
 import { userTable } from './user.schema';
 
 export const chatTable = pgTable('chats', {
-	id: serial('id').primaryKey(),
+	id: text('id').primaryKey(),
 	userOneId: text('user_one_id')
 		.notNull()
 		.references(() => userTable.id),
@@ -14,7 +14,7 @@ export const chatTable = pgTable('chats', {
 
 export const messageTable = pgTable('messages', {
 	id: serial('id').primaryKey(),
-	chatId: integer('chat_id')
+	chatId: text('chat_id')
 		.notNull()
 		.references(() => chatTable.id),
 	message: text('message').notNull(),
