@@ -41,8 +41,6 @@ export const actions: Actions = {
 			return foundEmptyChat.id;
 		});
 
-		console.log({ chatIdToJoin });
-
 		redirect(302, `/match/${chatIdToJoin}`);
 	}
 };

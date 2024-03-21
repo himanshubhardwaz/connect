@@ -5,6 +5,7 @@ export const chatTable = pgTable('chats', {
 	id: text('id').primaryKey(),
 	userOneId: text('user_one_id').references(() => userTable.id),
 	userTwoId: text('user_two_id').references(() => userTable.id),
+	expired: boolean('expired').default(false),
 	createdAt: timestamp('created_at').defaultNow()
 });
 
