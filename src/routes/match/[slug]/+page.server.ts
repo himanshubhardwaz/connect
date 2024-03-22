@@ -1,8 +1,8 @@
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/server/db';
-import { messageTable } from '$lib/db/schema/chat.schema';
-import { eq } from 'drizzle-orm';
-import { fail, json } from '@sveltejs/kit';
+import { chatTable, messageTable } from '$lib/db/schema/chat.schema';
+import { eq, type InferSelectModel } from 'drizzle-orm';
+import { fail, json, redirect } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 
 export const load: PageServerLoad = async (event) => {
@@ -16,13 +16,17 @@ export const load: PageServerLoad = async (event) => {
 
 	const receiverId = chat?.userOneId === senderId ? chat?.userTwoId : chat?.userOneId;
 
-	const messages = await db.select().from(messageTable).where(eq(messageTable.chatId, chatId));
+	let messages: Array<InferSelectModel<typeof messageTable>> = [];
+
+	if (!chat?.expired) {
+		messages = await db.select().from(messageTable).where(eq(messageTable.chatId, chatId));
+	}
 
 	return { chat, messages, senderId, receiverId };
 };
 
 export const actions: Actions = {
-	default: async (event) => {
+	'send-message': async (event) => {
 		try {
 			const chatId = event.params.slug;
 
@@ -55,6 +59,20 @@ export const actions: Actions = {
 			const typedError = error as Error;
 			return fail(400, {
 				message: `Something went wrong, could not send message ${dev ? typedError.message : null}`
+			});
+		}
+	},
+	'leave-chat': async (event) => {
+		try {
+			const chatId = event.params.slug;
+
+			await db.update(chatTable).set({ expired: true }).where(eq(chatTable.id, chatId));
+
+			redirect(302, '/');
+		} catch (error) {
+			const typedError = error as Error;
+			return fail(400, {
+				message: `Something went wrong, could not leave chat ${dev ? typedError.message : null}`
 			});
 		}
 	}
