@@ -24,19 +24,28 @@ export const actions: Actions = {
 
 			if (!foundEmptyChat) {
 				const chatId = generateId(15);
-				tx.insert(chatTable).values({
+				await tx.insert(chatTable).values({
 					id: chatId,
 					userOneId: userId
 				});
 				return chatId;
 			}
 
-			const isUserOneEmpty = !!foundEmptyChat.userOneId;
+			const { userOneId, userTwoId } = foundEmptyChat;
 
-			if (isUserOneEmpty)
-				tx.update(chatTable).set({ userOneId: userId }).where(eq(chatTable.id, foundEmptyChat.id));
-			else
-				tx.update(chatTable).set({ userTwoId: userId }).where(eq(chatTable.id, foundEmptyChat.id));
+			if (userId === userOneId || userId === userTwoId) return foundEmptyChat.id;
+
+			if (userOneId) {
+				await tx
+					.update(chatTable)
+					.set({ userTwoId: userId })
+					.where(eq(chatTable.id, foundEmptyChat.id));
+			} else {
+				await tx
+					.update(chatTable)
+					.set({ userOneId: userId })
+					.where(eq(chatTable.id, foundEmptyChat.id));
+			}
 
 			return foundEmptyChat.id;
 		});

@@ -6,11 +6,19 @@ import { fail, json } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 
 export const load: PageServerLoad = async (event) => {
+	const senderId = event.locals.user?.id;
+
 	const chatId = event.params.slug;
+
+	const chat = await db.query.chatTable.findFirst({
+		where: (ct) => eq(ct.id, chatId)
+	});
+
+	const receiverId = chat?.userOneId === senderId ? chat?.userTwoId : chat?.userOneId;
 
 	const messages = await db.select().from(messageTable).where(eq(messageTable.chatId, chatId));
 
-	return { chatId, messages };
+	return { chat, messages, senderId, receiverId };
 };
 
 export const actions: Actions = {
@@ -19,9 +27,9 @@ export const actions: Actions = {
 			const chatId = event.params.slug;
 
 			const formData = await event.request.formData();
-			const message = await formData.get('message');
-			const receiverId = await formData.get('receiverId');
-			const senderId = await formData.get('senderId');
+			const message = formData.get('message');
+			const senderId = formData.get('senderId');
+			const receiverId = formData.get('receiverId');
 
 			if (
 				typeof message !== 'string' ||
@@ -29,7 +37,7 @@ export const actions: Actions = {
 				typeof senderId !== 'string'
 			) {
 				return fail(400, {
-					message: 'Email requried'
+					message: 'Invalid data'
 				});
 			}
 
@@ -46,7 +54,7 @@ export const actions: Actions = {
 		} catch (error: unknown) {
 			const typedError = error as Error;
 			return fail(400, {
-				message: `Something went wrong, could not send message ${dev ?? typedError.message}`
+				message: `Something went wrong, could not send message ${dev ? typedError.message : null}`
 			});
 		}
 	}

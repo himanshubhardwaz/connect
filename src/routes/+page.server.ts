@@ -5,7 +5,8 @@ import { lucia } from '$lib/server/auth';
 export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user) redirect(302, '/login');
 	return {
-		email: event.locals.user.email
+		email: event.locals.user.email,
+		userId: event.locals.user.id
 	};
 };
 
