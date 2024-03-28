@@ -1,8 +1,18 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
     import { enhance } from '$app/forms';
+    import { page } from '$app/stores'; 
+    import { subsribeToChannel } from "$lib/ably-client"
+    import { onMount } from "svelte"
+    import { CHANNEL_CHAT_PREFIX } from '$lib/ably-client';
 
     export let data: PageData;
+    
+    onMount(async() => {
+        const chatId = data?.chat?.id;
+        await subsribeToChannel(`${CHANNEL_CHAT_PREFIX}-${chatId}`)
+    })
+
 </script>
 
 {#if data.chat?.expired}

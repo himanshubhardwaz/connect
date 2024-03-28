@@ -4,6 +4,8 @@ import { chatTable, messageTable } from '$lib/db/schema/chat.schema';
 import { eq, type InferSelectModel } from 'drizzle-orm';
 import { fail, json, redirect } from '@sveltejs/kit';
 import { dev } from '$app/environment';
+import { publishMessage } from '$lib/server/ably';
+import { CHANNEL_CHAT_PREFIX } from '$lib/ably-client';
 
 export const load: PageServerLoad = async (event) => {
 	const senderId = event.locals.user?.id;
@@ -44,6 +46,13 @@ export const actions: Actions = {
 					message: 'Invalid data'
 				});
 			}
+
+			await publishMessage({
+				msg: message,
+				senderId,
+				receiverId,
+				channelName: `${CHANNEL_CHAT_PREFIX}-${chatId}`
+			});
 
 			await db.insert(messageTable).values({
 				chatId,
