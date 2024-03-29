@@ -3,13 +3,12 @@ import { ABLY_API_KEY } from '$env/static/private';
 import type { Types } from 'ably';
 import Ably from 'ably';
 
+import type { message } from '$lib/store/chat';
+
 let ably: Types.RealtimePromise | null = null;
 
-export interface PublishMessageProps {
-	msg: string;
+export interface PublishMessageProps extends message {
 	channelName: string;
-	senderId: string;
-	receiverId: string;
 }
 
 export function getAbly() {
@@ -23,7 +22,7 @@ export async function getChannelByName(channel: string | undefined) {
 }
 
 export const publishMessage = async ({
-	msg,
+	message,
 	channelName,
 	senderId,
 	receiverId
@@ -31,9 +30,8 @@ export const publishMessage = async ({
 	const channel = await getChannelByName(channelName);
 
 	await channel.publish({
-		name: channelName,
 		data: {
-			msg,
+			message,
 			senderId,
 			receiverId
 		}

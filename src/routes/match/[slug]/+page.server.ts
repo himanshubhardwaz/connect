@@ -36,21 +36,27 @@ export const actions: Actions = {
 			const message = formData.get('message');
 			const senderId = formData.get('senderId');
 			const receiverId = formData.get('receiverId');
+			const msgId = formData.get('msgId');
 
 			if (
 				typeof message !== 'string' ||
 				typeof receiverId !== 'string' ||
-				typeof senderId !== 'string'
+				typeof senderId !== 'string' ||
+				typeof msgId !== 'string'
 			) {
 				return fail(400, {
 					message: 'Invalid data'
 				});
 			}
 
-			await publishMessage({
-				msg: message,
+			void publishMessage({
+				message,
 				senderId,
 				receiverId,
+				chatId,
+				id: Number(msgId),
+				isDeleted: false,
+				createdAt: new Date(),
 				channelName: `${CHANNEL_CHAT_PREFIX}-${chatId}`
 			});
 
