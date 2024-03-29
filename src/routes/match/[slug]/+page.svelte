@@ -40,28 +40,52 @@
 </script>
 
 {#if data.chat?.expired}
-	<p class="text-red-500 text-lg">Chat Expired</p>
+	<div class="text-red-500 text-lg text-center my-4">Chat Expired</div>
 {:else}
-	<ul>
-		{#each $chats as msg}
-			<li>
-				From: {msg.senderId} <br />
-				To: {msg.receiverId} <br />
-				Message: {msg.message}
-			</li>
-		{/each}
-	</ul>
+	<div class="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden my-4">
+		<ul class="divide-y divide-gray-200">
+			{#each $chats as msg}
+				<li class="p-4">
+					{#if msg.senderId === data.senderId}
+						<p class="text-gray-800"><span class="font-semibold">You:</span> {msg.message}</p>
+					{:else}
+						<p class="text-blue-600">
+							<span class="font-semibold">Stranger:</span>
+							{msg.message}
+						</p>
+					{/if}
+				</li>
+			{/each}
+		</ul>
+	</div>
 {/if}
 
-<form method="post" action="?/send-message" use:enhance>
-	<label for="message">Message</label>
-	<input name="message" id="message" required /><br />
-	<input name="receiverId" id="receiverId" value={data.receiverId} type="hidden" />
-	<input name="senderId" id="senderId" value={data.senderId} type="hidden" />
-	<input name="msgId" id="msgId" value={data.messages.length + 1} type="hidden" />
-	<button disabled={data.chat?.expired} on:click={onSendChatButtonClick}>Continue</button>
-</form>
+<div class="max-w-lg mx-auto">
+	<form method="post" action="?/send-message" class="flex items-center space-x-4" use:enhance>
+		<input
+			name="message"
+			id="message"
+			required
+			class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-indigo-200"
+			placeholder="Type your message here"
+		/>
+		<input name="receiverId" id="receiverId" value={data.receiverId} type="hidden" />
+		<input name="senderId" id="senderId" value={data.senderId} type="hidden" />
+		<input name="msgId" id="msgId" value={data.messages.length + 1} type="hidden" />
+		<button
+			type="submit"
+			disabled={data.chat?.expired}
+			class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none"
+			>Send</button
+		>
+	</form>
 
-<form method="post" action="?/leave-chat" use:enhance>
-	<button disabled={data.chat?.expired}>Leave</button>
-</form>
+	<form method="post" action="?/leave-chat" class="my-4" use:enhance>
+		<button
+			type="submit"
+			disabled={data.chat?.expired}
+			class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none"
+			>Leave Chat</button
+		>
+	</form>
+</div>

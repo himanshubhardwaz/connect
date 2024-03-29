@@ -87,7 +87,7 @@ export const actions: Actions = {
 		} catch (error) {
 			const typedError = error as Error;
 			return fail(400, {
-				message: `Something went wrong, could not leave chat ${dev ? typedError.message : null}`
+				message: `Something went wrong, could not leave chat ${dev ? typedError.message ?? error : null}`
 			});
 		}
 	}
