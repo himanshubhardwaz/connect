@@ -3,11 +3,11 @@ import { writable } from 'svelte/store';
 export type Modal =
 	| {
 			title: string;
-			descrition: string;
+			description: string;
 			onOk: () => void;
 			okText: string;
-			onCancle: () => void;
-			cancleText: string;
+			onCancel: () => void;
+			cancelText: string;
 	  }
 	| undefined;
 

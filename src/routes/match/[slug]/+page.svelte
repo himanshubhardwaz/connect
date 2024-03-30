@@ -20,11 +20,11 @@
 
 	function handleLeaveChatButtonClicked() {
 		showModal({
-			cancleText: 'Dont leave',
+			cancelText: "Don't leave",
 			okText: 'Leave',
-			descrition: 'If you leave this chat will be closed and you cannot join this chat again',
+			description: 'If you leave, this chat will be closed, and you cannot join it again.',
 			onOk: leaveChat,
-			onCancle: closeModal,
+			onCancel: closeModal,
 			title: 'Leave Chat'
 		});
 	}
