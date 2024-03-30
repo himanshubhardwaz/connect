@@ -1,8 +1,9 @@
 <script>
 	import '../app.css';
-	import Toast from '$lib/components/toast.svelte';
-	import { ToastPosition, showToast, ToastType } from '$lib/store/toast';
+	import Toast from '$lib/components/Toast.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 </script>
 
 <Toast />
+<Modal />
 <slot />

@@ -6,10 +6,28 @@
 	import { CHANNEL_CHAT_PREFIX } from '$lib/ably-client';
 	import { initChat, chats, addChat } from '$lib/store/chat';
 	import { generateId } from 'lucia';
+	import { showModal, closeModal } from '$lib/store/modal';
 
 	export let data: PageData;
 
 	$: lastMessageInView = true;
+
+	function leaveChat() {
+		closeModal();
+		const form = document.querySelector('#leave-chat-form') as HTMLFormElement;
+		form.submit();
+	}
+
+	function handleLeaveChatButtonClicked() {
+		showModal({
+			cancleText: 'Dont leave',
+			okText: 'Leave',
+			descrition: 'If you leave this chat will be closed and you cannot join this chat again',
+			onOk: leaveChat,
+			onCancle: closeModal,
+			title: 'Leave Chat'
+		});
+	}
 
 	function handleScroll() {
 		console.log('running this...');
@@ -139,13 +157,13 @@
 			>
 		</form>
 
-		<form method="post" action="?/leave-chat" class="ml-4">
-			<button
-				type="submit"
-				disabled={data.chat?.expired}
-				class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none"
-				>Leave</button
-			>
-		</form>
+		<button
+			type="submit"
+			disabled={data.chat?.expired}
+			class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none ml-4"
+			on:click={handleLeaveChatButtonClicked}>Leave</button
+		>
+
+		<form method="post" action="?/leave-chat" id="leave-chat-form" />
 	</div>
 </div>
