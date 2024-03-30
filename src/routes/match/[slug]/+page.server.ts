@@ -49,7 +49,7 @@ export const actions: Actions = {
 				});
 			}
 
-			void publishMessage({
+			await publishMessage({
 				message,
 				senderId,
 				receiverId,
@@ -71,9 +71,10 @@ export const actions: Actions = {
 				statusText: 'Success'
 			});
 		} catch (error: unknown) {
-			const typedError = error as Error;
+			let errorMsg = 'Something went wrong, could not send message';
+			if (error instanceof Error && dev) errorMsg = error.message;
 			return fail(400, {
-				message: `Something went wrong, could not send message ${dev ? typedError.message : null}`
+				message: errorMsg
 			});
 		}
 	},

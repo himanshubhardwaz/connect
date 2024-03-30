@@ -42,7 +42,7 @@
 	class="h-screen bg-gradient-to-b from-gray-800 to-gray-900 flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 relative"
 >
 	<div
-		class="max-w-lg w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden flex-grow h-[calc(100vh-64px)] mb-12 overflow-y-auto"
+		class="max-w-lg w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden flex-grow h-[calc(100vh-64px)] mb-16 overflow-y-auto"
 	>
 		<ul class="divide-y divide-gray-200">
 			{#each $chats as msg}
