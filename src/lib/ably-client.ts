@@ -18,17 +18,22 @@ export async function getChannel(channel: string | undefined, ABLY_API_KEY?: str
 	return getAbly(ABLY_API_KEY).channels.get(channel);
 }
 
-export async function subsribeToChannel(channelName: string | undefined) {
-	if (!channelName) throw new Error('Channel name required, when subscribing to events');
+export async function subsribeToChannel(
+	channelName: string | undefined,
+	currentUserId: string | undefined
+) {
+	if (!channelName || !currentUserId)
+		throw new Error('Channel name and or current user id required, when subscribing to events');
 	const channel = await getChannel(channelName);
 	await channel.attach();
 	await channel.subscribe((message) => {
 		const data = message.data as PublishMessageProps;
-		addChat(data);
+		if (data.receiverId === currentUserId) addChat(data);
 	});
 }
 
 export async function subscribeToChatChanges(channelName: string | undefined) {
+	// TODO - add join/leave events, typing...
 	if (!channelName) throw new Error('Channel name required, when subscribing to chat changes');
 }
 

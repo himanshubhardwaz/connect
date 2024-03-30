@@ -9,11 +9,7 @@
 
 	export let data: PageData;
 
-	$: ({ messages } = data);
-
-	$: initChat(messages);
-
-	function onSendChatButtonClick() {
+	function optimisticallyUpdateMessage() {
 		const messageInput = document.getElementById('message') as HTMLInputElement;
 		const receiverIdInput = document.getElementById('receiverId') as HTMLInputElement;
 		const senderIdInput = document.getElementById('senderId') as HTMLInputElement;
@@ -34,9 +30,10 @@
 	}
 
 	onMount(() => {
+		initChat(data.messages);
 		const chatId = data?.chat?.id;
 		const channelName = `${CHANNEL_CHAT_PREFIX}-${chatId}`;
-		void subsribeToChannel(channelName);
+		void subsribeToChannel(channelName, data.senderId);
 		return () => void unsubcribeFromChannel(channelName);
 	});
 </script>
@@ -67,6 +64,7 @@
 		<form
 			method="post"
 			action="?/send-message"
+			on:submit={optimisticallyUpdateMessage}
 			class="flex items-center space-x-4 flex-grow"
 			use:enhance
 		>
@@ -84,7 +82,7 @@
 				type="submit"
 				disabled={data.chat?.expired}
 				class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none"
-				on:click={onSendChatButtonClick}>Send</button
+				>Send</button
 			>
 		</form>
 
@@ -93,7 +91,7 @@
 				type="submit"
 				disabled={data.chat?.expired}
 				class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none"
-				>Leave Chat</button
+				>Leave</button
 			>
 		</form>
 	</div>

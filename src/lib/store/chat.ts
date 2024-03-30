@@ -7,7 +7,7 @@ export type message = InferSelectModel<typeof messageTable>;
 export const chats = writable<Array<message>>([]);
 
 export function initChat(initChats: Array<message> | undefined) {
-	if (initChats) chats.update(() => initChats);
+	if (initChats) chats.set(initChats);
 }
 
 export function addChat(chat: message) {
