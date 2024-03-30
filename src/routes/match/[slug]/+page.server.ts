@@ -84,7 +84,7 @@ export const actions: Actions = {
 
 			await db.update(chatTable).set({ expired: true }).where(eq(chatTable.id, chatId));
 
-			redirect(302, '/');
+			redirect(302, '/login');
 		} catch (error) {
 			const typedError = error as Error;
 			return fail(400, {

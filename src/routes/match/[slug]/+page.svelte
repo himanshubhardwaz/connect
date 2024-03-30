@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
-	import { subsribeToChannel, unsubcribeFromChannel } from '$lib/ably-client';
+	import {
+		subsribeToChannel,
+		unsubcribeFromChannel,
+		subscribeToConnectionStateChanges
+	} from '$lib/ably-client';
 	import { onMount, tick } from 'svelte';
 	import { CHANNEL_CHAT_PREFIX } from '$lib/ably-client';
 	import { initChat, chats, addChat } from '$lib/store/chat';
@@ -88,7 +92,9 @@
 		initChat(data.messages);
 		const chatId = data?.chat?.id;
 		const channelName = `${CHANNEL_CHAT_PREFIX}-${chatId}`;
+
 		void subsribeToChannel(channelName, data.senderId);
+		void subscribeToConnectionStateChanges();
 
 		return () => {
 			if (container) {
