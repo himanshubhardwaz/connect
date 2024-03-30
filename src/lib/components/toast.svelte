@@ -16,7 +16,9 @@
 				<div class="text-green-500 rounded-full bg-white mr-3">
 					<SuccessIcon />
 				</div>
-				<div class="text-white max-w-xs" on:click={toast.onClick}>{toast.message}</div>
+				<button class="text-white max-w-xs" on:click={toast.onClick}>
+					{toast.message}
+				</button>
 			</div>
 		{:else if toast.type === ToastType.Info}
 			<div
@@ -25,7 +27,9 @@
 				<div class="text-blue-500 rounded-full bg-white mr-3">
 					<InfoIcon />
 				</div>
-				<div class="text-white max-w-xs" on:click={toast.onClick}>{toast.message}</div>
+				<button class="text-white max-w-xs" on:click={toast.onClick}>
+					{toast.message}
+				</button>
 			</div>{:else if toast.type === ToastType.Warning}
 			<div
 				class="flex items-center bg-orange-400 border-l-4 border-orange-700 py-2 px-3 shadow-md mb-2"
@@ -33,13 +37,17 @@
 				<div class="text-orange-500 rounded-full bg-white mr-3">
 					<WarningIcon />
 				</div>
-				<div class="text-white max-w-xs" on:click={toast.onClick}>{toast.message}</div>
+				<button class="text-white max-w-xs" on:click={toast.onClick}>
+					{toast.message}
+				</button>
 			</div>{:else}
 			<div class="flex items-center bg-red-500 border-l-4 border-red-700 py-2 px-3 shadow-md mb-2">
 				<div class="text-red-500 rounded-full bg-white mr-3">
 					<ErrorIcon />
 				</div>
-				<div class="text-white max-w-xs" on:click={toast.onClick}>{toast.message}</div>
+				<button class="text-white max-w-xs" on:click={toast.onClick}>
+					{toast.message}
+				</button>
 			</div>{/if}
 	</div>
 {/each}

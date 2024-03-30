@@ -2,12 +2,37 @@
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 	import { subsribeToChannel, unsubcribeFromChannel } from '$lib/ably-client';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { CHANNEL_CHAT_PREFIX } from '$lib/ably-client';
 	import { initChat, chats, addChat } from '$lib/store/chat';
 	import { generateId } from 'lucia';
 
 	export let data: PageData;
+
+	$: lastMessageInView = true;
+
+	function handleScroll() {
+		console.log('running this...');
+		const container = document.querySelector('#chat-area');
+		if (!container) return;
+
+		const lastMessage = container.querySelector('ul > li:last-child');
+		if (!lastMessage) return;
+
+		const rect = lastMessage.getBoundingClientRect();
+		lastMessageInView = rect.bottom <= container.getBoundingClientRect().bottom;
+	}
+
+	function scrollToBottom() {
+		const container = document.querySelector('#chat-area');
+		if (container) {
+			const lastMessage = container.querySelector('ul > li:last-child');
+			if (lastMessage) {
+				lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+				lastMessageInView = true;
+			}
+		}
+	}
 
 	function optimisticallyUpdateMessage() {
 		const messageInput = document.getElementById('message') as HTMLInputElement;
@@ -30,11 +55,30 @@
 	}
 
 	onMount(() => {
+		const container = document.querySelector('#chat-area');
+		if (container) {
+			container.addEventListener('scroll', handleScroll);
+			handleScroll();
+		}
+
+		const unsubscribe = chats.subscribe(() => {
+			tick().then(() => {
+				scrollToBottom();
+			});
+		});
+
 		initChat(data.messages);
 		const chatId = data?.chat?.id;
 		const channelName = `${CHANNEL_CHAT_PREFIX}-${chatId}`;
 		void subsribeToChannel(channelName, data.senderId);
-		return () => void unsubcribeFromChannel(channelName);
+
+		return () => {
+			if (container) {
+				container.removeEventListener('scroll', handleScroll);
+			}
+			void unsubcribeFromChannel(channelName);
+			unsubscribe();
+		};
 	});
 </script>
 
@@ -43,6 +87,7 @@
 >
 	<div
 		class="max-w-lg w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden flex-grow h-[calc(100vh-64px)] mb-16 overflow-y-auto"
+		id="chat-area"
 	>
 		<ul class="divide-y divide-gray-200">
 			{#each $chats as msg}
@@ -58,6 +103,14 @@
 				</li>
 			{/each}
 		</ul>
+		{#if !lastMessageInView}
+			<button
+				class="fixed bottom-32 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 px-4 py-2 shadow-lg rounded-lg select-none"
+				on:click={scrollToBottom}
+			>
+				Scroll or Click to see new messages
+			</button>
+		{/if}
 	</div>
 
 	<div class="bg-white p-4 flex items-center justify-between h-16 fixed bottom-0 left-0 right-0">
