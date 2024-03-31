@@ -79,17 +79,10 @@ export const actions: Actions = {
 		}
 	},
 	'leave-chat': async (event) => {
-		try {
-			const chatId = event.params.slug;
+		const chatId = event.params.slug;
 
-			await db.update(chatTable).set({ expired: true }).where(eq(chatTable.id, chatId));
+		await db.update(chatTable).set({ expired: true }).where(eq(chatTable.id, chatId));
 
-			redirect(302, '/login');
-		} catch (error) {
-			const typedError = error as Error;
-			return fail(400, {
-				message: `Something went wrong, could not leave chat ${dev ? typedError.message ?? error : null}`
-			});
-		}
+		redirect(301, '/');
 	}
 };
