@@ -1,4 +1,4 @@
-import { ABLY_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 import { getChannel } from '$lib/ably-client';
 
@@ -14,7 +14,7 @@ export const publishMessage = async ({
 	senderId,
 	receiverId
 }: PublishMessageProps) => {
-	const channel = await getChannel(channelName, ABLY_API_KEY);
+	const channel = await getChannel(channelName, env.ABLY_API_KEY);
 
 	await channel.publish({
 		data: {

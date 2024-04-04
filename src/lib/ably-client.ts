@@ -1,4 +1,4 @@
-import { PUBLIC_ABLY_SUBSCRIBE_API_KEY } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import Ably from 'ably';
 import type { PublishMessageProps } from './server/ably';
 import { addChat, getChatConfig, updateChatConfig } from './store/chat';
@@ -11,7 +11,7 @@ export const CHANNEL_CHAT_PREFIX = 'match';
 let ably: Types.RealtimePromise | null = null;
 
 export function getAbly(ABLY_API_KEY?: string) {
-	if (!ably) ably = new Ably.Realtime.Promise(ABLY_API_KEY ?? PUBLIC_ABLY_SUBSCRIBE_API_KEY);
+	if (!ably) ably = new Ably.Realtime.Promise(ABLY_API_KEY ?? env.PUBLIC_ABLY_SUBSCRIBE_API_KEY);
 	return ably;
 }
 
