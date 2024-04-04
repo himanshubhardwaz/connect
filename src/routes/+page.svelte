@@ -5,9 +5,9 @@
 <div
 	class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-900 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8"
 >
-	<h1 class="text-4xl text-white font-bold mb-8">Welcome to ChatZone!</h1>
+	<h1 class="text-4xl text-white font-bold mb-8 text-center">Welcome to ChatZone!</h1>
 
-	<p class="text-lg text-gray-300 mb-10">
+	<p class="text-lg text-gray-300 mb-10 text-center">
 		Connect with strangers based on shared interests and start interesting conversations!
 	</p>
 
@@ -43,7 +43,7 @@
 		</div>
 
 		<div class="text-left max-w-md mx-auto">
-			<h2 class="text-xl font-semibold mb-4">Featured Users</h2>
+			<h2 class="text-xl font-semibold mb-4 text-center">Featured Users</h2>
 			<div class="bg-white rounded-lg p-4 mb-4 shadow-md">
 				<div class="flex items-center justify-between mb-2">
 					<div class="flex items-center">
@@ -90,7 +90,7 @@
 		</div>
 
 		<div class="text-left max-w-md mx-auto">
-			<h2 class="text-xl font-semibold mb-4">Chat Preview</h2>
+			<h2 class="text-xl font-semibold mb-4 text-center">Chat Preview</h2>
 			<div class="bg-white rounded-lg p-4 mb-4 shadow-md">
 				<div class="flex items-center justify-between mb-2">
 					<div class="flex items-center">

@@ -115,12 +115,12 @@
 		class="h-screen bg-gradient-to-b from-gray-800 to-gray-900 flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 relative"
 	>
 		<div
-			class="max-w-lg w-full mx-auto bg-white shadow-md rounded-lg overflow-hidden flex-grow h-[calc(100vh-64px)] mb-16 overflow-y-auto"
+			class="max-w-lg w-full mx-auto shadow-md rounded-lg overflow-hidden flex-grow h-[calc(100vh-64px)] mb-16 overflow-y-auto"
 			id="chat-area"
 		>
-			<ul class="divide-y divide-gray-200">
+			<ul class="divide-y divide-gray-500 flex flex-col gap-4">
 				{#each $chats as msg}
-					<li class="p-4">
+					<li class="p-4 bg-gray-200 rounded-lg">
 						{#if msg.senderId === data.senderId}
 							<p class="text-gray-800"><span class="font-semibold">You:</span> {msg.message}</p>
 						{:else}
@@ -142,21 +142,31 @@
 			{/if}
 		</div>
 
-		<div class="bg-white p-4 flex items-center justify-between h-16 fixed bottom-0 left-0 right-0">
+		<div
+			class="bg-white p-2 flex justify-between items-center h-16 fixed bottom-0 left-0 right-0 gap-2"
+		>
+			<button
+				type="submit"
+				disabled={data.chat?.expired}
+				class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none"
+				on:click={handleLeaveChatButtonClicked}>Leave</button
+			>
 			<form
 				method="post"
 				action="?/send-message"
 				on:submit={optimisticallyUpdateMessage}
-				class="flex items-center space-x-4 flex-grow"
+				class="flex justify-between items-center flex-grow gap-2"
 				use:enhance
 			>
-				<input
-					name="message"
-					id="message"
-					required
-					class="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-indigo-200"
-					placeholder="Type your message here"
-				/>
+				<div class="flex-1">
+					<input
+						name="message"
+						id="message"
+						required
+						class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring focus:ring-indigo-200"
+						placeholder="Type your message here"
+					/>
+				</div>
 				<input name="receiverId" id="receiverId" value={$chatConfig.receiverId} type="hidden" />
 				<input name="senderId" id="senderId" value={$chatConfig.senderId} type="hidden" />
 				<input name="msgId" id="msgId" value={data.messages.length + 1} type="hidden" />
@@ -168,21 +178,14 @@
 				>
 			</form>
 
-			<button
-				type="submit"
-				disabled={data.chat?.expired}
-				class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none ml-4"
-				on:click={handleLeaveChatButtonClicked}>Leave</button
-			>
-
-			<form method="post" action="?/leave-chat" id="leave-chat-form" />
+			<form method="post" action="?/leave-chat" id="leave-chat-form" class="hidden" />
 		</div>
 	</div>
 {:else}
 	<div class="bg-gray-900 w-full min-h-screen flex justify-center items-center">
 		<div class="flex flex-col gap-4 min-h-screen w-full items-center justify-center">
 			<Spinner />
-			<p class="text-xl text-gray-200">Pls wait while we are finding a match for you...</p>
+			<p class="text-xl text-gray-200 text-center mx-4">Pls wait we are finding a match for you</p>
 		</div>
 	</div>
 {/if}
