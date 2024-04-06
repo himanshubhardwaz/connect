@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	let loading = false;
+	let connectLoading = false;
+	let signOutLoading = false;
 </script>
 
 <div
@@ -12,11 +13,21 @@
 		Connect with strangers based on shared interests and start interesting conversations!
 	</p>
 
-	<form class="mb-4" method="post" use:enhance>
+	<form
+		class="mb-4"
+		method="post"
+		use:enhance={() => {
+			signOutLoading = true;
+			return async ({ update }) => {
+				await update();
+				signOutLoading = false;
+			};
+		}}
+	>
 		<button
 			class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300"
 		>
-			Sign out
+			{signOutLoading ? 'Signing out...' : 'Sign out'}
 		</button>
 	</form>
 
@@ -24,18 +35,18 @@
 		method="post"
 		action="/match"
 		use:enhance={() => {
-			loading = true;
+			connectLoading = true;
 			return async ({ update }) => {
 				await update();
-				loading = false;
+				connectLoading = false;
 			};
 		}}
 	>
 		<button
 			class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300"
-			disabled={loading}
+			disabled={connectLoading}
 		>
-			{loading ? 'Connecting...' : 'Connect'}
+			{connectLoading ? 'Connecting...' : 'Connect'}
 		</button>
 	</form>
 </div>
