@@ -16,6 +16,15 @@
 
 	export let data: PageData;
 
+	let sending = false;
+
+	$: {
+		if (sending) {
+			const messageInput = document.getElementById('message') as HTMLInputElement;
+			if (messageInput) messageInput.value = '';
+		}
+	}
+
 	updateChatConfig({ senderId: data.senderId, receiverId: data.receiverId ?? undefined });
 
 	$: lastMessageInView = true;
@@ -154,9 +163,15 @@
 			<form
 				method="post"
 				action="?/send-message"
-				on:submit={optimisticallyUpdateMessage}
 				class="flex justify-between items-center flex-grow gap-2"
-				use:enhance
+				use:enhance={() => {
+					optimisticallyUpdateMessage();
+					sending = true;
+					return async ({ update }) => {
+						await update();
+						sending = false;
+					};
+				}}
 			>
 				<div class="flex-1">
 					<input

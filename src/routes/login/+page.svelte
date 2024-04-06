@@ -13,7 +13,6 @@
 	$: {
 		setZodIssues(form?.issues);
 		formError = form?.error;
-		console.log({ formError });
 	}
 </script>
 

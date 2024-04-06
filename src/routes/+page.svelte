@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	let loading = false;
 </script>
 
 <div
@@ -19,11 +20,22 @@
 		</button>
 	</form>
 
-	<form method="post" action="/match">
+	<form
+		method="post"
+		action="/match"
+		use:enhance={() => {
+			loading = true;
+			return async ({ update }) => {
+				await update();
+				loading = false;
+			};
+		}}
+	>
 		<button
 			class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300"
+			disabled={loading}
 		>
-			Connect
+			{loading ? 'Connecting...' : 'Connect'}
 		</button>
 	</form>
 

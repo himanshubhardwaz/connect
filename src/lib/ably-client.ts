@@ -76,17 +76,14 @@ export async function subscribeToChatChanges(channelName: string | undefined) {
 	if (!channelName) throw new Error('Channel name required, when subscribing to chat changes');
 	const channel = getChannel(channelName);
 	await channel.presence.subscribe('enter', (member) => {
-		console.log(member);
 		if (member.clientId !== getChatConfig()?.senderId)
 			updateChatConfig({ receiverId: member.clientId });
 	});
-	await channel.presence.subscribe('leave', (member) => {
-		console.log(member);
+	await channel.presence.subscribe('leave', () => {
 		// if (member.clientId !== getChatConfig()?.senderId)
 		// 	updateChatConfig({ receiverId: member.clientId });
 	});
-	await channel.presence.subscribe('update', (member) => {
-		console.log(member);
+	await channel.presence.subscribe('update', () => {
 		// if (member.clientId !== getChatConfig()?.senderId)
 		// 	updateChatConfig({ receiverId: member.clientId });
 	});
