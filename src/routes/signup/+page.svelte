@@ -1,5 +1,20 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { setZodIssues } from '$lib/store/zod-issues';
+	import ZodIssue from '$lib/components/ZodIssue.svelte';
+	import FormError from '$lib/components/FormError.svelte';
+
+	export let form;
+
+	let formError: string | undefined;
+	let formErrorField: string | undefined;
+	let loading = false;
+
+	$: {
+		setZodIssues(form?.issues);
+		formError = form?.error;
+		formErrorField = form?.feild;
+	}
 </script>
 
 <div class="min-h-screen bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -9,9 +24,19 @@
 
 	<div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 		<div class="bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
-			<form class="space-y-6" method="post" use:enhance>
+			<form
+				class="space-y-6"
+				method="post"
+				use:enhance={() => {
+					loading = true;
+					return async ({ update }) => {
+						await update();
+						loading = false;
+					};
+				}}
+			>
 				<div>
-					<label for="email" class="block text-sm font-medium text-white"> Email address </label>
+					<label for="email" class="block text-sm font-medium text-white">Email address </label>
 					<div class="mt-1">
 						<input
 							id="email"
@@ -24,6 +49,7 @@
                         focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 						/>
 					</div>
+					<ZodIssue feild="email" />
 				</div>
 
 				<div>
@@ -40,6 +66,7 @@
                         focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 						/>
 					</div>
+					<ZodIssue feild="fullName" />
 				</div>
 
 				<div>
@@ -54,9 +81,9 @@
 						>
 							<option value="true">Male</option>
 							<option value="false">Female</option>
-							<option value="other">Other</option>
 						</select>
 					</div>
+					<ZodIssue feild="isMale" />
 				</div>
 
 				<div>
@@ -73,6 +100,7 @@
                         focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 						/>
 					</div>
+					<ZodIssue feild="password" />
 				</div>
 
 				<div>
@@ -82,8 +110,9 @@
                     rounded-md shadow-sm text-sm font-medium text-white
                     bg-indigo-600 hover:bg-indigo-700 focus:outline-none
                     focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+						disabled={loading}
 					>
-						Sign up
+						{loading ? 'Loading...' : 'Sign up'}
 					</button>
 				</div>
 
@@ -94,6 +123,8 @@
 						>
 					</p>
 				</div>
+
+				<FormError field={formErrorField} error={formError} />
 			</form>
 		</div>
 	</div>

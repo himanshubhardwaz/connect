@@ -2,25 +2,32 @@ import { lucia } from '$lib/server/auth';
 import { fail, redirect } from '@sveltejs/kit';
 import { Argon2id } from 'oslo/password';
 import { db } from '$lib/server/db';
+import { z } from 'zod';
 
 import type { Actions } from './$types';
+
+const LoginFormSchema = z.object({
+	email: z.string().email({ message: 'Enter a valid email' }),
+	password: z
+		.string()
+		.min(6, { message: 'Password should be atleast 6 charaters long' })
+		.max(20, { message: 'Password length must not increase 20 characters' })
+});
 
 export const actions: Actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
-		const email = formData.get('email');
-		const password = formData.get('password');
+		const loginFormUserInput = {
+			email: formData.get('email'),
+			password: formData.get('password')
+		};
+		const safeParse = LoginFormSchema.safeParse(loginFormUserInput);
 
-		if (typeof email !== 'string' || !email) {
-			return fail(400, {
-				message: 'Invalid email'
-			});
+		if (!safeParse.success) {
+			return fail(400, { issues: safeParse.error.issues });
 		}
-		if (typeof password !== 'string' || password.length < 6 || password.length > 255) {
-			return fail(400, {
-				message: 'Invalid password'
-			});
-		}
+
+		const { email, password } = safeParse.data;
 
 		const existingUser = await db.query.userTable.findFirst({
 			where: (users, { eq }) => eq(users.email, email)
@@ -28,7 +35,7 @@ export const actions: Actions = {
 
 		if (!existingUser) {
 			return fail(400, {
-				message: 'Incorrect email or password'
+				error: 'Incorrect email and/or password'
 			});
 		}
 
@@ -36,7 +43,7 @@ export const actions: Actions = {
 
 		if (!validPassword) {
 			return fail(400, {
-				message: 'Incorrect email or password'
+				error: 'Incorrect email and/or password'
 			});
 		}
 
