@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import {env} from '$env/dynamic/private';
+import { env } from '$env/dynamic/private';
 import { dev } from '$app/environment';
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import * as userSchema from '$lib/db/schema/user.schema';

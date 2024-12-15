@@ -21,3 +21,12 @@ export const sessionTable = pgTable('sessions', {
 		mode: 'date'
 	}).notNull()
 });
+
+export const emailVerificationTable = pgTable('email-verification', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => userTable.id),
+	isActive: boolean('is_active').default(true),
+	createdAt: timestamp('created_at').defaultNow()
+});
