@@ -1,41 +1,48 @@
-# Connect
+# Connect 🎯
 
-Connect is a modern, lightweight web application inspired by the now-discontinued Omegle platform. It allows users to connect with strangers through seamless text and video chat. Built using cutting-edge technologies like SvelteKit, Vite, and Drizzle ORM, Connect delivers high performance, scalability, and an exceptional user experience.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-FF3E00?logo=svelte&logoColor=white)](https://kit.svelte.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
----
-
-## Features
-
-- **Real-Time Communication**: Powered by Ably for real-time text and video chat.
-- **Authentication**: Secure and easy authentication with Lucia and Drizzle ORM.
-- **Database Integration**: PostgreSQL support via Drizzle ORM for data management.
-- **Responsive UI**: Styled with TailwindCSS for a clean, mobile-friendly interface.
+> A modern real-time chat platform built with SvelteKit. Connect instantly with strangers through text and video chat.
 
 ---
 
-## Tech Stack
+## ✨ Key Features
 
-- **Frontend**: [SvelteKit](https://kit.svelte.dev/) for a fast, reactive UI.
-- **Backend**: Node.js, with [Drizzle ORM](https://orm.drizzle.team/) for database interaction.
-- **Real-Time Messaging**: [Ably](https://ably.com/) for live chat functionality.
-- **Database**: PostgreSQL for relational data storage.
-- **Build Tool**: [Vite](https://vitejs.dev/) for fast development and builds.
+- 🔄 Real-time communication
+- 🎥 Video chat support (Coming soon)
+- 🔒 Secure authentication
+- 📱 Responsive design
+- 🌐 Global matchmaking
 
 ---
 
-## Installation
+## 🛠️ Tech Stack
+
+- **Frontend:** SvelteKit, TailwindCSS
+- **Backend:** Node.js, PostgreSQL
+- **ORM:** Drizzle
+- **Real-time:** Ably
+- **Auth:** Lucia
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v18+ recommended)
+- Node.js (v18+)
 - PostgreSQL
+- npm/pnpm
 
-### Steps
+### Installation
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-repo/connect.git
+   git clone https://github.com/yourusername/connect.git
    cd connect
    ```
 
