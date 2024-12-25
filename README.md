@@ -7,6 +7,8 @@
 
 > A modern real-time chat platform built with SvelteKit. Connect instantly with strangers through text and video chat.
 
+![connect_gif](https://github.com/user-attachments/assets/d282d3f3-6768-4c6c-8f28-107e7e6d628f)
+
 ---
 
 ## ✨ Key Features
